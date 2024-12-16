@@ -1,0 +1,55 @@
+close all
+clear all
+
+numberOfSeconds = 1;
+
+Data = load('playback_44100.mat');
+pcm_signal = Data.w441;
+FS  = 44.1e3;  % Frequency
+numberOfSamples = FS * numberOfSeconds;
+t = (0:length(pcm_signal)-1)/FS;
+t_frac = linspace(0, numberOfSeconds, numberOfSamples);
+N=length(t_frac);
+fraction_signal = pcm_signal(2720000:N+2720000-1);
+
+% Représentation des 50 premiers échantillons
+figure(1);
+subplot(2,1,1);
+plot(t, pcm_signal);
+title("Représentation des 50 premiers échantillons du signal pdm in");
+xlabel("Durée (s)");
+ylabel("Amplitude");
+
+subplot(2,1,2);
+plot(t_frac,fraction_signal);
+title("Représentation des 50 premiers échantillons du signal pdm in");
+xlabel("Durée (s)");
+ylabel("Amplitude");
+
+%% Interpolation
+%upsample_fraction_signal = interp(fraction_signal,160);
+
+upsample_fraction_signal1 = upsample(fraction_signal,160); %on utilise upsample (même méthode que le cours)
+%upsample_signal = interp(pcm_signal,160);
+
+t_frac_upsample = (0:length(upsample_fraction_signal)-1)/FS;
+%t_upsample = (0:length(upsample_signal)-1)/FS;
+
+figure(2);
+subplot(2,1,1);
+plot(t_frac,fraction_signal);
+title("Représentation d'une seconde du signal audio 44,1kHz");
+xlabel("Durée (s)");
+ylabel("Amplitude");
+
+subplot(2,1,2);
+plot(t_frac_upsample,upsample_fraction_signal1);
+title("Représentation upsample par 160 d'une seconde du signal audio 44,1kHz");
+xlabel("Durée (s)");
+ylabel("Amplitude");
+
+subplot(3,1,3);
+plot(t_frac_upsample,upsample_fraction_signal1);
+title("Représentation upsample par 160 d'une seconde du signal audio 44,1kHz");
+xlabel("Durée (s)");
+ylabel("Amplitude");
