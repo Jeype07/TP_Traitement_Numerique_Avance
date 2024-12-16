@@ -9,7 +9,7 @@ FS  = 44.1e3;  % Frequency
 numberOfSamples = FS * numberOfSeconds;
 t = (0:length(pcm_signal)-1)/FS;
 t_frac = linspace(0, numberOfSeconds, numberOfSamples);
-N=length(t_frac);
+N=length(t_frac)
 fraction_signal = pcm_signal(2720000:N+2720000-1);
 
 % Représentation des 50 premiers échantillons
@@ -67,31 +67,64 @@ phase = angle(fft(upsample_fraction_signal1));
 
 figure(3);
 % Représentation de la phase filtrée du signal 
-subplot(2,1,1);
+subplot(2,2,1);
 plot(f, amplitude); 
 
-title("Amplitude spectrale filtrée");
+title("Amplitude spectrale avant filtre");
 xlabel("Fréquence (Hz)");
 ylabel("Amplitude");
 % Représentation de l'amplitude spectrale
-subplot(2,1,2);
+subplot(2,2,2);
 plot(f, phase); 
 
-title("Phase filtrée");
+title("Phase avant filtre");
 xlabel("Fréquence (Hz)");
 ylabel("Phase (radians)");
 
 % Représentation de la phase filtrée du signal 
-subplot(2,2,1);
+subplot(2,2,3);
 plot(f, filtered_amplitude1); 
 
 title("Amplitude spectrale filtrée");
 xlabel("Fréquence (Hz)");
 ylabel("Amplitude");
 % Représentation de l'amplitude spectrale
-subplot(2,2,2);
+subplot(2,2,4);
 plot(f, filtered_phase1); 
 
 title("Phase filtrée");
 xlabel("Fréquence (Hz)");
 ylabel("Phase (radians)");
+
+%% Décimation
+signal_decim = decimate(filtered_pcm_signal1, 147);
+
+% Amplitude et phase
+decim_amplitude = abs(fftshift(fft(signal_decim)));        % Amplitude spectrale
+decim_phase = angle(fftshift(fft(signal_decim)));          % Phase spectrale
+
+FS2 = 48e3;
+nombre_retard = FS * 0.5;
+numberOfSamples2 = FS2 * numberOfSeconds;
+N=length(t_frac);
+fraction_signal = pcm_signal(2720000+nombre_retard:N+2720000-1+nombre_retard);
+
+t_frac2 = linspace(0, numberOfSeconds, numberOfSamples2);
+t_frac = linspace(0, numberOfSeconds, numberOfSamples);
+
+figure(4);
+subplot(2,2,1);
+plot(decim_amplitude)
+title("Amplitude signal décimé");
+
+subplot(2,2,2)
+plot(decim_phase)
+title("Phase signal décimé");
+
+subplot(2,2,3)
+plot(signal_decim)
+title("Signal temporel décimé");
+
+subplot(2,2,4)
+plot(t_frac,fraction_signal);
+title("Signal temporel initial");
