@@ -9,7 +9,7 @@ FS  = 44.1e3;  % Frequency
 numberOfSamples = FS * numberOfSeconds;
 t = (0:length(pcm_signal)-1)/FS;
 t_frac = linspace(0, numberOfSeconds, numberOfSamples);
-N=length(t_frac);
+N=length(t_frac)
 fraction_signal = pcm_signal(2720000:N+2720000-1);
 
 % Représentation des 50 premiers échantillons
